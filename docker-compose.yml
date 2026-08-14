@@ -1,0 +1,25 @@
+services:
+  site:
+    build: .
+    container_name: yusufshoots
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file: .env
+    volumes:
+      - ./data:/data
+
+  # --- Option A: Cloudflare Tunnel (recommended — no port forwarding, free HTTPS) ---
+  # 1. Cloudflare dashboard → Zero Trust → Networks → Tunnels → create tunnel
+  # 2. Add a public hostname: yusufshoots.com → http://site:8080
+  # 3. Put the tunnel token in .env as CLOUDFLARE_TUNNEL_TOKEN, then uncomment:
+  #
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: yusufshoots-tunnel
+  #   restart: unless-stopped
+  #   command: tunnel run
+  #   environment:
+  #     - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+  #   depends_on:
+  #     - site
