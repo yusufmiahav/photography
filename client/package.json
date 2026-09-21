@@ -1,0 +1,16 @@
+{
+  "name": "yusufshoots-client",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build step for the yusufshoots.com frontend — bundles React + the site's JSX into one static app.js, replacing the old runtime Babel/CDN setup.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

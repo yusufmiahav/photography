@@ -10,11 +10,19 @@ business.
 ```
 deploy/
 ├── docker-compose.yml     # one service (+ optional Cloudflare Tunnel)
-├── Dockerfile
+├── Dockerfile             # builds the frontend, then the runtime image
 ├── .env.example           # copy to .env and fill in
 ├── server/                # Node backend (Express + Stripe, JSON storage)
-└── site/index.html        # the frontend
+├── client/                # frontend SOURCE (edit this) — React/JSX, built at image-build time
+└── site/                  # frontend OUTPUT — index.html (static shell) + app.js (generated, not committed)
 ```
+
+The frontend used to load React and Babel from a CDN and transpile its JSX in
+every visitor's browser on every page load. It's now built once, at Docker
+build time, into a single static `site/app.js` — faster for visitors, and the
+site no longer depends on a third-party CDN being reachable to render at all.
+`docker compose up -d --build` still does everything; there's no separate
+build step for you to remember.
 
 ## 1. Prepare the NAS
 
@@ -87,11 +95,15 @@ snapshot that folder on a schedule. To restore: put the folder back and
 
 ## Updating the site
 
-Replace `site/index.html` (and/or `server/server.js`) with a newer version, then:
+Edit `client/src/app.jsx` for the frontend (this is the actual source — don't
+edit `site/app.js` or `site/index.html`'s old inline scripts, those are gone)
+and/or `server/server.js` for the backend, then:
 
 ```bash
 docker compose up -d --build
 ```
+
+The `--build` step recompiles the frontend automatically.
 
 ## Notes & limits
 
