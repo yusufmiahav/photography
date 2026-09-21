@@ -27,8 +27,25 @@ build step for you to remember.
 ## 1. Prepare the NAS
 
 1. In UGOS Pro, install **Docker** from the App Center.
-2. Copy this whole `deploy/` folder to a share on the NAS, e.g. `/volume1/docker/yusufshoots`.
-3. SSH in (or use the Docker app's compose UI) and `cd` to that folder.
+2. SSH into the NAS and get the code onto it, e.g. into `/volume1/docker/yusufshoots`:
+
+   ```bash
+   cd /volume1/docker
+   git clone https://github.com/yusufmiahav/photography.git yusufshoots
+   ```
+
+   If that gives `git: command not found` — many NAS OSes don't ship `git` —
+   run it through Docker instead (you already have Docker at this point, so
+   this always works, no extra package hunting):
+
+   ```bash
+   cd /volume1/docker
+   docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work \
+     alpine/git clone https://github.com/yusufmiahav/photography.git yusufshoots
+   ```
+
+   The repo is public, so no login or token is needed either way.
+3. `cd` to that folder for the rest of these steps.
 
 ## 2. Configure
 
@@ -95,15 +112,26 @@ snapshot that folder on a schedule. To restore: put the folder back and
 
 ## Updating the site
 
-Edit `client/src/app.jsx` for the frontend (this is the actual source — don't
-edit `site/app.js` or `site/index.html`'s old inline scripts, those are gone)
-and/or `server/server.js` for the backend, then:
+**Pulling the latest version from GitHub** (the usual case): from the
+`yusufshoots` folder on the NAS —
 
 ```bash
+git pull
 docker compose up -d --build
 ```
 
-The `--build` step recompiles the frontend automatically.
+(Or, if `git` isn't installed on the NAS, use the same `docker run alpine/git`
+form from step 1, with `pull` instead of `clone`, run from inside the
+`yusufshoots` folder.) `git pull` only touches tracked files — it never
+touches `.env` or `./data` (both are gitignored), so your Stripe keys,
+admin password, bookings, and uploads are untouched by an update.
+
+**Editing the code yourself**: `client/src/app.jsx` is the actual frontend
+source (don't edit `site/app.js` or hand-edit `site/index.html` — the old
+inline `<script>` blocks are gone, replaced by the build step) and
+`server/server.js` is the backend. Edit, commit, push, then `git pull` +
+`docker compose up -d --build` on the NAS as above. The `--build` step
+recompiles the frontend automatically either way.
 
 ## Notes & limits
 
