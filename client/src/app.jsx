@@ -915,7 +915,7 @@ function Footer({ navigate }) {
           <div>
             <h4>Connect</h4>
             <a href="https://instagram.com/yusufshoot.s" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="mailto:hello@yusufshoot.com">hello@yusufshoot.com</a>
+            <a href="mailto:hello@yusufshoots.com">hello@yusufshoots.com</a>
             <span className="muted">London &amp; travelling worldwide</span>
           </div>
         </div>
@@ -1140,10 +1140,15 @@ function Contact() {
           </Reveal>
           <Reveal delay={180}>
             <div className="contact__ways">
-              <a className="contact__phone" href="tel:+447305574530">
-                <span className="contact__phlbl">Call or WhatsApp</span>
-                <span className="contact__phnum">07305 574530</span>
-              </a>
+              <div className="contact__phone">
+                <span className="contact__phlbl">Call, text or WhatsApp</span>
+                <a className="contact__phnum" href="tel:+447305574530">07305 574530</a>
+                <div className="contact__acts">
+                  <a className="contact__act contact__act--wa" href="https://wa.me/447305574530?text=Hi%20Yusuf%2C%20I%27m%20enquiring%20about%20wedding%20photography" target="_blank" rel="noopener">WhatsApp</a>
+                  <a className="contact__act" href="tel:+447305574530">Call</a>
+                  <a className="contact__act" href="sms:+447305574530">Text</a>
+                </div>
+              </div>
               <a className="contact__mail" href="mailto:hello@yusufshoots.com">hello@yusufshoots.com</a>
             </div>
           </Reveal>
