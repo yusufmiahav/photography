@@ -1368,6 +1368,7 @@ function FilmCard({ film, onOpen, large }) {
 // Homepage teaser
 function FilmsTeaser({ navigate, films = FILMS }) {
   const [active, setActive] = useStateF(null);
+  if (!films || !films.length) return null; // no films yet: hide the section instead of crashing
   return (
     <section className="section films-teaser">
       <div className="section__head">
